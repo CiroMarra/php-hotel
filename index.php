@@ -59,25 +59,44 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col" class=text-danger >Nome</th>
-                <th scope="col" class=text-danger>Descrizione</th>
-                <th scope="col"class=text-danger>Parcheggio</th>
-                <th scope="col"class=text-danger>Voto</th>
-                <th scope="col"class=text-danger>Distanza dal centro (km)</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Descrizione</th>
+                <th scope="col">Parcheggio</th>
+                <th scope="col">Voto</th>
+                <th scope="col">Distanza dal centro (km)</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($hotels as $hotel): ?>
+                <?php
+                if (isset($_GET['parkingFilter']) && $_GET['parkingFilter'] !== '') {
+                    if (($hotel['parking'] && $_GET['parkingFilter'] === 'false') ||
+                        (!$hotel['parking'] && $_GET['parkingFilter'] === 'true')) {
+                        continue;
+                    }
+                }
+                ?>
                 <tr>
                     <td><?php echo $hotel['name']; ?></td>
-                    <td ><?php echo $hotel['description']; ?></td>
-                    <td><?php echo $hotel['parking'] ? 'Sì' : 'No'; ?></td>
+                    <td><?php echo $hotel['description']; ?></td>
+                    <td><?php echo $hotel['parking'] ? 'Si' : 'No'; ?></td>
                     <td><?php echo $hotel['vote']; ?></td>
                     <td><?php echo $hotel['distance_to_center']; ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
+    <form action="" method="GET">
+        <div class="mb-3">
+            <label for="parkingFilter" class="form-label">Cerca per parcheggio:</label>
+            <select class="form-select" id="parkingFilter" name="parkingFilter">
+                <option value="">Mostra tutti</option>
+                <option value="true">Con parcheggio</option>
+                <option value="false">Senza parcheggio</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Cerca</button>
+    </form>
 </div>
 </body>
 </html>
